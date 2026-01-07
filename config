@@ -1,0 +1,5 @@
+timeout_minutes: 1
+webservice:
+  host: 192.168.*.*
+  port: 8080
+  uri: "/PM"
