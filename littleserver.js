@@ -18,7 +18,7 @@ app.use((req, res, next) => {
 });
 
 // Test-Endpunkt
-app.all('/dummy', (req, res) => {
+app.all('/PM', (req, res) => {
   res.json({ status: "ok" });
 });
 
