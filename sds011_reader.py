@@ -71,7 +71,7 @@ def read_nova_dust_sensor(device='/dev/ttyUSB0'):
     pm10 = (msg[5] * 256 + msg[4]) / 10.0
     checksum = sum(v for v in msg[2:8]) % 256
     assert checksum == msg[8]
-    return {'PM10': pm10, 'PM2_5': pm25}
+    return {'pm10': pm10, 'pm25': pm25}
 
 """
 Send PM data as they occur to a webservice
@@ -126,8 +126,12 @@ def main():
 
     while time.time() - start_time < timeout_seconds:
         data = read_nova_dust_sensor(args.device)
-        logging.info('My PM10=% 3.1f ug/m^3 My sPM2.5=% 3.1f ug/m^3', data['PM10'], data['PM2_5'])
-
+        logging.info('My PM10=% 3.1f ug/m^3 My sPM2.5=% 3.1f ug/m^3', data['pm10'], data['pm25'])
+        # Timestamp
+        data["measuredAt"] = datetime.datetime.utcnow().isoformat()
+        # Standort hinzufügen
+        data["latitude"] = 51.106;
+        data["longitude"] = 6.615;
         response = send_json(f"http://{host}:{port}{uri}", data)
         
         if args.csv:
